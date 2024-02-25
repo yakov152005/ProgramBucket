@@ -10,7 +10,7 @@ public class Program {
 
 
 	}
-	public static void ExMagic(){
+	public static void Magic(){
 		Bucket b1 = new Bucket(7);
 		Bucket b2 = new Bucket(5);
 		System.out.println("Before magic: |b1|=" +b1 + " |b2|=" +b2);
