@@ -5,12 +5,39 @@ import java.util.Scanner;
 
 public class Program {
 	public static void main(String[] args){
-		date();
+		System.out.println();
+		//for magic
+		magic();
+
+
+		System.out.println();
+		//for fill exact amount
+		Bucket[] bucketForAmount = new Bucket[3];
+		creatBucketsArr(bucketForAmount);
+		printBucketsArr(bucketForAmount);
+		int amount = 18;
+		int[] filledBuckets = fillExactAmount(bucketForAmount, amount);
+		if (filledBuckets!=null) {
+			System.out.println("Buckets filled to exact amount: ");
+			for (int i = 0; i < filledBuckets.length; i++) {
+				System.out.println("Bucket " + (filledBuckets[i] + 1 ));
+			}
+		}else System.out.println("No buckets were filled to the exact amount :(");
+
+		
+		System.out.println();
+		//for reduce amount buckets
+		Bucket[] bucketsForReduce = new Bucket[3];
+		float max = 60;
+		reduceAmountInBuckets(bucketsForReduce, max);
+
+		
+		System.out.println();
+		//for play buckets game
 		playBucketsGame();
 
-
 	}
-	public static void Magic(){
+	public static void magic(){
 		Bucket b1 = new Bucket(7);
 		Bucket b2 = new Bucket(5);
 		System.out.println("Before magic: |b1|=" +b1 + " |b2|=" +b2);
@@ -26,8 +53,50 @@ public class Program {
 		b2.fill(b1);
 		System.out.println("After magic: |b1|=" +b1+" |b2|=" + b2);
 	}
+	public static Bucket[] creatBucketsArr(Bucket[] buckets){
+		for (int i = 0; i < buckets.length; i++) {
+			buckets[i] = new Bucket(r.nextInt(20) + 1);
+			buckets[i].addLiters(r.nextInt(15) + 1);
+		}
+		return buckets;
+	}
+	public static void printBucketsArr(Bucket[] buckets){
+		for (int i = 0; i < buckets.length; i++) {
+			System.out.println("Details for buckets |" + (i + 1) + "|");
+			System.out.println(buckets[i].toString());
+		}
+	}
+	static Bucket reduceAmountInBuckets(Bucket[] buckets, float max){
+		Bucket newBucket = new Bucket(40);
+		creatBucketsArr(buckets);
+		printBucketsArr(buckets);
+
+		for (int i = 0; i < buckets.length; i++) {
+			if (buckets[i].percent() > max){
+				System.out.println("Before buckets " + (i+1) + " percent --> " + buckets[i].percent());
+				while (buckets[i].percent()>max) {
+					buckets[i].spill(1);
+					newBucket.addLiters(1);
+				}
+				System.out.println("After --> " + buckets[i].percent());
+
+			}
+		}return null;
+	}
+	public static int[] fillExactAmount(Bucket[] buckets, int amount){
+		Bucket newBuckets =new Bucket(amount);
+		int[] counter = new int[buckets.length];
+		boolean res = false;
+		for (int i = 0; i < buckets.length; i++) {
+			newBuckets.fill(buckets[i]);
+			if (newBuckets.isFull() ){
+				counter[i] = i;
+				res = true;
+			}
+		}
+		return res ? counter : null;
+	}
 	public static void playBucketsGame() {
-		Random r = new Random();
 		Bucket[] buckets = new Bucket[3];
 		for (int i = 0; i < buckets.length; i++) {
 			buckets[i] = new Bucket(r.nextInt(20) + 1);
@@ -90,6 +159,7 @@ public class Program {
 		}
 		System.out.println("GAME OVER [^_^]");
 	}
+
 	public static void exCheckForProgramBucket(){
 
 		System.out.println("Ex1");
@@ -167,6 +237,7 @@ public class Program {
 		Scanner s = new Scanner(System.in);
 		return s.nextInt();
 	}
+	public static Random r = new Random();
 	public static void date(){
 		Date date = new Date();
 		SimpleDateFormat df = new SimpleDateFormat("|dd/MM/yyyy HH:mm|");
